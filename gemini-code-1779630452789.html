@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLEEKER — Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CORE DESIGN VARIABLES */
+        :root {
+            --bg-canvas: #0d0d0d;       
+            --bg-button: #1f1f1f;       
+            --bg-hover: #2d2d2d;        
+            --text-main: #ffffff;
+            --text-muted: #737373;
+            --accent-blue: #3b82f6;     
+            --accent-red: #ff0000;      
+            --max-width: 580px;         
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* FLEXIBLE WRAPPER FOR PERFECT PHONE/PC INTERFACE */
+        .hub-container {
+            width: 100%;
+            max-width: var(--max-width);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            object-fit: cover; 
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+        .profile-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background-color: var(--accent-blue);
+            color: var(--bg-canvas);
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .link-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .link-card, .action-card {
+            width: 100%;
+            background-color: var(--bg-button);
+            border: 1px solid rgba(255,255,255,0.02);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-main);
+            font-family: inherit;
+            transition: background-color 0.2s ease, transform 0.15s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent; /* Fixes blue flash on mobile tap */
+        }
+
+        .link-card:hover, .action-card:hover {
+            background-color: var(--bg-hover);
+            transform: scale(1.01);
+        }
+
+        /* Prevents weird scale loops on touch screen mobile devices */
+        @media (hover: hover) {
+            .link-card:hover, .action-card:hover {
+                transform: scale(1.01);
+            }
+        }
+
+        .link-card:active, .action-card:active {
+            transform: scale(0.98); /* Snappy tap feedback for phone screens */
+        }
+
+        .socials-dropdown {
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.2s ease; 
+        }
+
+        .socials-dropdown.is-open {
+            max-height: 200px; 
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+            border-color: rgba(255, 0, 0, 0.2);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .card-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-grow: 1;
+            text-align: center;
+            margin-right: 32px; 
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* SMARTPHONE DYNAMIC MEDIA OPTIMIZATION */
+        @media (max-width: 480px) {
+            body {
+                padding: 30px 16px; /* Tighten up edge padding so layout doesn't clip */
+            }
+            .brand-avatar {
+                width: 80px; /* Scale profile size down slightly to keep balance */
+                height: 80px;
+            }
+            .profile-title {
+                font-size: 1rem; /* Proportional text size scaling */
+                margin-bottom: 24px;
+            }
+            .link-card, .action-card {
+                padding: 14px 12px; /* Optimize touch space for fingers */
+            }
+            .card-text {
+                font-size: 0.78rem; /* Make row text look clean and legible on tiny viewports */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        
+        <img src="https://i.ibb.co/5zbVQ10/image.png" alt="KLEEKER Avatar" class="brand-avatar">
+        
+        <h1 class="profile-title">
+            KLEEKER 
+            <span class="verified-badge" title="Verified Account">✓</span>
+        </h1>
+
+        <nav class="link-stack">
+            
+            <a href="#" class="link-card">
+                <div class="card-icon">🎮</div>
+                <div class="card-text">Games</div>
+            </a>
+
+            <button class="action-card" onclick="toggleSocialsMenu()" aria-expanded="false" id="socials-trigger-btn">
+                <div class="card-icon">🚨</div>
+                <div class="card-text">Socials</div>
+            </button>
+
+            <div class="socials-dropdown" id="social-drawer">
+                <a href="https://www.youtube.com/@kleeker-pixel" target="_blank" rel="noopener noreferrer" class="link-card dropdown-item">
+                    <div class="card-icon" style="color: var(--accent-red);">▶</div>
+                    <div class="card-text" style="letter-spacing: 0.5px;">YouTube Channel</div>
+                </a>
+            </div>
+
+        </nav>
+
+        <footer class="footer-text">
+            Since 2026
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleSocialsMenu() {
+            const drawer = document.getElementById('social-drawer');
+            const button = document.getElementById('socials-trigger-btn');
+            const isOpen = drawer.classList.toggle('is-open');
+            button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+    </script>
+
+</body>
+</html>
